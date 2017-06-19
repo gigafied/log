@@ -58,7 +58,7 @@
       var styles = logger.themes[theme]
       if (isMuted || !shouldLog(namespace, levelIdx) || !(log = root.console && root.console[method])) return
       args = Array.prototype.slice.call(arguments, 2)
-      if (namespace && !msg) {
+      if (namespace && typeof msg === 'undefined') {
         msg = namespace
         namespace = 'none'
       }
@@ -113,12 +113,12 @@
     function doWrap (level) {
       return function () {
         if (isMuted) return
-        log[level].apply(null, [namespace].concat(arguments))
+        logger[level].apply(null, [namespace].concat([].slice.call(arguments)))
       }
     }
     for (i = 0; i < levels.length; i++) {
       level = levels[i]
-      ret[level] = doWrap(level, log[level])
+      ret[level] = doWrap(level, logger[level])
     }
     return ret
   }
@@ -138,8 +138,8 @@
     error: wrapConsole('error', 'error'),
     warn: wrapConsole('warn', 'warn'),
     info: wrapConsole('info', 'info'),
-    debug: wrapConsole('debug', 'logger'),
-    verbose: wrapConsole('verbose', 'debug'),
+    verbose: wrapConsole('verbose', 'log'),
+    debug: wrapConsole('debug', 'debug'),
     silly: wrapConsole('silly', 'debug'),
     setLevel: setLevel,
     setLevels: setLevels,
