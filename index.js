@@ -75,7 +75,7 @@
       else logArgs = logArgs.concat(styles.level, styles[level])
 
       log.apply(root.console, logArgs.concat(args))
-      for (i = 0; i < handlers.length; i++) handlers.apply(null, [level, namespace, msg].concat(args))
+      for (i = 0; i < handlers.length; i++) handlers[i].apply(null, [level, namespace, msg].concat(args))
     }
   }
 
